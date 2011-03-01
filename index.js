@@ -10,52 +10,51 @@ function InstagramClient(client_id, client_secret) {
     this.media = new InstagramMediaClient(this);
 }
 
+InstagramClient.prototype.fetch = function (options, callback) {
+    options.host = options.host || 'api.instagram.com';
+
+    https.get(options, function (res) {
+	var raw = "";
+	res.on('data', function (chunk) {
+	    raw += chunk;
+	});
+	res.on('end', function () {
+	    var response = JSON.parse(raw);
+
+	    callback(response);
+	});
+    });    
+}
+
 function InstagramMediaClient(parent) {
     this.parent = parent;
 }
 
 InstagramMediaClient.prototype.id = function (id, callback) {
     var options = {
-	host: 'api.instagram.com',
 	path: '/v1/media/'+id+'?client_id='+this.parent.client_id
     };
 
-    https.get(options, function (res) {
-	var raw = "";
-	res.on('data', function (chunk) {
-	    raw += chunk;
-	});
-	res.on('end', function () {
-	    var response = JSON.parse(raw);
-	    
-	    if (response['meta']['code'] == 200) {
-		callback(response['data'], null);
-	    }else{
-		callback(response['meta'], response['meta']['code']);
-	    }
-	});
+    this.parent.fetch(options, function (response) {
+	if (response['meta']['code'] == 200) {
+	    callback(response['data'], null);
+	}else{
+	    callback(response['meta'], response['meta']['code']);
+	}
     });
 };
 
 InstagramMediaClient.prototype.popular = function (callback) {
     var options = {
-	host: 'api.instagram.com',
 	path: '/v1/media/popular/?client_id='+this.parent.client_id
     };
-    https.get(options, function (res) {
-	var raw = "";
-	res.on('data', function (chunk) {
-	    raw += chunk;
-	});
-	res.on('end', function () {
-	    var response = JSON.parse(raw);
-	    
-	    if (response['meta']['code'] == 200) {
-		callback(response['data'], null);
-	    }else{
-		callback(response['meta'], response['meta']['code']);
-	    }
-	});
+
+    this.parent.fetch(options, function (response) {
+	if (response['meta']['code'] == 200) {
+	    callback(response['data'], null);
+	}else{
+	    callback(response['meta'], response['meta']['code']);
+	}
     });
 }
 
