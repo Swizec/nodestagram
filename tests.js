@@ -6,7 +6,7 @@ var instagram = require('./index.js').createClient('a8d764b1a7fe4089959910ee6bdc
 exports.testMediaFetchById = function (test) {
     test.expect(2);
 
-    instagram.media(100, function (media, error) {
+    instagram.media.id(100, function (media, error) {
 	test.ok(media['type']);
 	test.equal(error, null, "Returned an error");
 

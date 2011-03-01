@@ -6,9 +6,14 @@ var http = require('http'),
 function InstagramClient() {
     this.client_id = '';
     this.client_secret = '';
+
+    this.media = new InstagramMediaClient();
 }
 
-InstagramClient.prototype.media = function (id, callback) {
+function InstagramMediaClient() {
+}
+
+InstagramMediaClient.prototype.id = function (id, callback) {
     var options = {
 	host: 'api.instagram.com',
 	path: '/v1/media/'+id+'?client_id='+this.client_id
