@@ -12,4 +12,15 @@ exports.testMediaFetchById = function (test) {
 
 	test.done();
     });
-}
+};
+
+exports.testMediaFetchPopular = function (test) {
+    test.expect(2)
+
+    instagram.media.popular(function (media, error) {
+	test.ok((media.length > 0));
+	test.equal(error, null, "Returned an error");
+
+	test.done();
+    });
+};
