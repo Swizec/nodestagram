@@ -1,6 +1,7 @@
 
 var http = require('http'),
-    https = require('https');
+    https = require('https'),
+    querystring = require('querystring');
 
 
 function InstagramClient(client_id, client_secret) {
@@ -49,6 +50,21 @@ InstagramMediaClient.prototype.popular = function (callback) {
 	path: '/v1/media/popular/?client_id='+this.parent.client_id
     };
 
+    this.parent.fetch(options, function (response) {
+	if (response['meta']['code'] == 200) {
+	    callback(response['data'], null);
+	}else{
+	    callback(response['meta'], response['meta']['code']);
+	}
+    });
+}
+
+InstagramMediaClient.prototype.search = function (parameters, callback) {
+    parameters['client_id'] = this.parent.client_id;
+
+    var options = {
+	path: '/v1/media/search/?'+querystring.stringify(parameters)
+    }
     this.parent.fetch(options, function (response) {
 	if (response['meta']['code'] == 200) {
 	    callback(response['data'], null);

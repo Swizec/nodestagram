@@ -24,3 +24,25 @@ exports.testMediaFetchPopular = function (test) {
 	test.done();
     });
 };
+
+exports.testMediaSearch = function (test) {
+    var params = [{lat: 37.7937111, lng: -122.3926227},
+		  {lat: 37.7937111, lng: -122.3926227, distance: 2000}];
+
+    test.expect(params.length*2);
+    
+    var do_it = function (i, callback) {
+	instagram.media.search(params[i], function (media, error) {
+	    test.ok((media.length > 0));
+	    test.equal(error, null, "Return error for "+params);
+	    
+	    if (i < params.length-1) {
+		do_it(i+1, do_it);
+	    }else{
+		test.done();
+	    }
+	});
+    }
+
+    do_it(0);
+};
