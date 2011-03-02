@@ -82,3 +82,14 @@ exports.testTagsMedia = function (test) {
 			     test.done();
 			 });
 }
+
+exports.testTagsTag = function (test) {
+    test.expect(2);
+
+    instagram.tags.tag('snow', function (tag, error) {
+	test.ok(tag.media_count);
+	test.equal(error, null);
+
+	test.done();
+    });
+}

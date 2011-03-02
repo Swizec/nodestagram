@@ -79,6 +79,10 @@ InstagramTagsClient.prototype.media = function (tag, params, callback) {
 		      callback);
 }
 
+InstagramTagsClient.prototype.tag = function (tag, callback) {
+    this.parent.fetch('/v1/tags/'+tag, callback);
+}
+
 exports.createClient = function (client_id, client_secret) {
     var instagram_client = new InstagramClient(client_id, client_secret);
 
