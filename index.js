@@ -68,6 +68,16 @@ InstagramTagsClient.prototype.search = function (query, callback) {
 		      callback);
 }
 
+InstagramTagsClient.prototype.media = function (tag, params, callback) {
+    if (arguments.length < 3) {
+	var callback = params;
+	params = {};
+    }
+
+    this.parent.fetch('/v1/tags/'+tag+'/media/recent/',
+		      params,
+		      callback);
+}
 
 exports.createClient = function (client_id, client_secret) {
     var instagram_client = new InstagramClient(client_id, client_secret);

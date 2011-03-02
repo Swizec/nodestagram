@@ -57,3 +57,28 @@ exports.testTagsSearch = function (test) {
 	test.done();
     });
 }
+
+exports.testTagsMedia = function (test) {
+    test.expect(8);
+
+    var max_id = 0, min_id = 0;
+
+    var callback = function (media, error) {
+	test.ok((media.length > 0));
+	test.equal(error, null);
+    }
+
+    instagram.tags.media('snow', function (media, error) {
+	callback(media, error);
+
+	max_id = media[0].id;
+	min_id = media[media.length-1].id;
+    });
+    instagram.tags.media('snow', {max_id: max_id}, callback);
+    instagram.tags.media('snow', {min_id: min_id}, callback);
+    instagram.tags.media('snow', {max_id: max_id, min_id: min_id}, 
+			 function (media, error) {
+			     callback(media, error);
+			     test.done();
+			 });
+}
