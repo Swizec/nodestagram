@@ -12,8 +12,18 @@ function InstagramClient(client_id, client_secret) {
     this.tags = new InstagramTagsClient(this);
 }
 
-InstagramClient.prototype.fetch = function (options, callback) {
-    options.host = options.host || 'api.instagram.com';
+InstagramClient.prototype.fetch = function (path, params, callback) {
+    if (arguments.length == 3) {
+	params.client_id = this.client_id;
+    }else{
+	var callback = params;
+	params = {client_id: this.client_id};
+    }
+
+    var options = {
+	host: 'api.instagram.com',
+	path: path+'?'+querystring.stringify(params),
+    }
 
     https.get(options, function (res) {
 	var raw = "";
@@ -23,7 +33,11 @@ InstagramClient.prototype.fetch = function (options, callback) {
 	res.on('end', function () {
 	    var response = JSON.parse(raw);
 
-	    callback(response);
+	    if (response['meta']['code'] == 200) {
+		callback(response['data'], null);
+	    }else{
+		callback(response['meta'], response['meta']['code']);
+	    }
 	});
     });    
 }
@@ -33,46 +47,15 @@ function InstagramMediaClient(parent) {
 }
 
 InstagramMediaClient.prototype.id = function (id, callback) {
-    var options = {
-	path: '/v1/media/'+id+'?client_id='+this.parent.client_id
-    };
-
-    this.parent.fetch(options, function (response) {
-	if (response['meta']['code'] == 200) {
-	    callback(response['data'], null);
-	}else{
-	    callback(response['meta'], response['meta']['code']);
-	}
-    });
+    this.parent.fetch('/v1/media/'+id, callback);
 };
 
 InstagramMediaClient.prototype.popular = function (callback) {
-    var options = {
-	path: '/v1/media/popular/?client_id='+this.parent.client_id
-    };
-
-    this.parent.fetch(options, function (response) {
-	if (response['meta']['code'] == 200) {
-	    callback(response['data'], null);
-	}else{
-	    callback(response['meta'], response['meta']['code']);
-	}
-    });
+    this.parent.fetch('/v1/media/popular/', callback);
 }
 
 InstagramMediaClient.prototype.search = function (parameters, callback) {
-    parameters['client_id'] = this.parent.client_id;
-
-    var options = {
-	path: '/v1/media/search/?'+querystring.stringify(parameters)
-    }
-    this.parent.fetch(options, function (response) {
-	if (response['meta']['code'] == 200) {
-	    callback(response['data'], null);
-	}else{
-	    callback(response['meta'], response['meta']['code']);
-	}
-    });
+    this.parent.fetch('/v1/media/search/', parameters, callback);
 }
 
 function InstagramTagsClient (parent) {
@@ -80,17 +63,9 @@ function InstagramTagsClient (parent) {
 }
 
 InstagramTagsClient.prototype.search = function (query, callback) {
-    var options = {
-	path: '/v1/tags/search/?q='+query+'&client_id='+this.parent.client_id
-    }
-
-    this.parent.fetch(options, function (response) {
-	if (response['meta']['code'] == 200) {
-	    callback(response['data'], null);
-	}else{
-	    callback(response['meta'], response['meta']['code']);
-	}
-    });
+    this.parent.fetch('/v1/tags/search/',
+		      {q: query},
+		      callback);
 }
 
 
