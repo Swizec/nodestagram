@@ -46,3 +46,14 @@ exports.testMediaSearch = function (test) {
 
     do_it(0);
 };
+
+exports.testTagsSearch = function (test) {
+    test.expect(2);
+
+    instagram.tags.search('snow', function (tags, error) {
+	test.ok((tags.length > 0));
+	test.equal(error, null, "Returned an error");
+
+	test.done();
+    });
+}
