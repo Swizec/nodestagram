@@ -1,7 +1,7 @@
 {
   "name": "instagram",
   "description": "Instagram API wrapper for node.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/Swizec/nodestagram",
   "repository": {
     "type": "git",
