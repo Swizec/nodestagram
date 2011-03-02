@@ -32,6 +32,18 @@ For example:
     		             lng: <some longitude>},
 			    function (images, error) { ... });
 
+    // get info about a tag
+    instagram.tags.tag('snow', function (tag, error) { ... });
+
+    // get recent media for a tag
+    instagram.tags.media('snow', function (tag, error) { ... });
+    instagram.tags.media('snow', {max_id: 5}, function (tag, error) { ... });
+    instagram.tags.media('snow', {min_id: 5}, function (tag, error) { ... });
+    instagram.tags.media('snow', {max_id: 5, min_id: 0}, function (tag, error) { ... });
+
+    // search for a tag
+    instagram.tags.search('snow', function (tags, error) { ... });
+
 # License
 
 Some sort of BSD or MIT license,  the general idea being:
