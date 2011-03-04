@@ -33,10 +33,17 @@ InstagramClient.prototype.fetch = function (path, params, callback) {
 	res.on('end', function () {
 	    var response = JSON.parse(raw);
 
+	    var pagination = null;
+	    if (typeof(response['pagination']) != 'undefined') {
+		pagination = response['pagination'];
+	    }
+
 	    if (response['meta']['code'] == 200) {
-		callback(response['data'], null);
+		callback(response['data'], 
+			 null, 
+			 pagination);
 	    }else{
-		callback(response['meta'], response['meta']['code']);
+		callback(response['meta'], response['meta']['code'], pagination);
 	    }
 	});
     });    

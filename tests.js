@@ -50,7 +50,7 @@ exports.testMediaSearch = function (test) {
 exports.testTagsSearch = function (test) {
     test.expect(2);
 
-    instagram.tags.search('snow', function (tags, error) {
+    instagram.tags.search('snow', function (tags, error, pagination) {
 	test.ok((tags.length > 0));
 	test.equal(error, null, "Returned an error");
 
@@ -59,17 +59,18 @@ exports.testTagsSearch = function (test) {
 }
 
 exports.testTagsMedia = function (test) {
-    test.expect(8);
+    test.expect(12);
 
     var max_id = 0, min_id = 0;
 
-    var callback = function (media, error) {
+    var callback = function (media, error, pagination) {
 	test.ok((media.length > 0));
+	test.ok((pagination != null));
 	test.equal(error, null);
     }
 
-    instagram.tags.media('snow', function (media, error) {
-	callback(media, error);
+    instagram.tags.media('snow', function (media, error, pagination) {
+	callback(media, error, pagination);
 
 	max_id = media[0].id;
 	min_id = media[media.length-1].id;
@@ -77,8 +78,8 @@ exports.testTagsMedia = function (test) {
     instagram.tags.media('snow', {max_id: max_id}, callback);
     instagram.tags.media('snow', {min_id: min_id}, callback);
     instagram.tags.media('snow', {max_id: max_id, min_id: min_id}, 
-			 function (media, error) {
-			     callback(media, error);
+			 function (media, error, pagination) {
+			     callback(media, error, pagination);
 			     test.done();
 			 });
 }
