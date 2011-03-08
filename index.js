@@ -10,6 +10,7 @@ function InstagramClient(client_id, client_secret) {
 
     this.media = new InstagramMediaClient(this);
     this.tags = new InstagramTagsClient(this);
+    this.locations = new InstagramLocationsClient(this);
 }
 
 InstagramClient.prototype.fetch = function (path, params, callback) {
@@ -88,6 +89,14 @@ InstagramTagsClient.prototype.media = function (tag, params, callback) {
 
 InstagramTagsClient.prototype.tag = function (tag, callback) {
     this.parent.fetch('/v1/tags/'+tag, callback);
+}
+
+function InstagramLocationsClient (parent) {
+    this.parent = parent;
+}
+
+InstagramLocationsClient.prototype.id = function (id, callback) {
+    this.parent.fetch('/v1/locations/'+id, callback);
 }
 
 exports.createClient = function (client_id, client_secret) {
