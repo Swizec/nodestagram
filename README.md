@@ -32,6 +32,7 @@ For example:
     		             lng: <some longitude>},
 			    function (images, error) { ... });
 
+
     // get info about a tag
     instagram.tags.tag('snow', function (tag, error) { ... });
 
@@ -43,6 +44,19 @@ For example:
 
     // search for a tag
     instagram.tags.search('snow', function (tags, error) { ... });
+
+
+    // get info about a location
+    instagram.tags.tag(1, function (tag, error) { ... });
+
+    // get recent media for a location
+    instagram.tags.media(1, function (tag, error) { ... });
+    instagram.tags.media(1, {max_id: 5}, function (tag, error) { ... });
+    instagram.tags.media(1, {min_id: 5}, function (tag, error) { ... });
+    instagram.tags.media(1, {max_id: 5, min_id: 0}, function (tag, error) { ... });
+
+    // search for a location
+    instagram.tags.search({lat: ..., lng: ..., distance: ...}, function (tags, error) { ... });
 
 # License
 
