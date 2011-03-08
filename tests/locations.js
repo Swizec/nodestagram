@@ -40,7 +40,9 @@ exports.testLocationsMedia = function (test) {
 }
 
 exports.testLocationsSearch = function  (test) {
-    var datas = [];
+    var datas = [{lat: 48.858844, lng: 2.294351},
+		 {lat: 48.858844, lng: 2.294351, distance: 3000},
+		 {foursquare_id: 44379, distance: 1000}];
 
     test.expect(datas.length*2);
 

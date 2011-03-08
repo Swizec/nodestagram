@@ -110,6 +110,10 @@ InstagramLocationsClient.prototype.media = function (id, params, callback) {
 		      callback);
 }
 
+InstagramLocationsClient.prototype.search = function (params, callback) {
+    this.parent.fetch('/v1/locations/search', params, callback);
+}
+
 
 
 exports.createClient = function (client_id, client_secret) {
