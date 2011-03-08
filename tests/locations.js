@@ -14,14 +14,29 @@ exports.testLocationsFetchById = function (test) {
 }
 
 exports.testLocationsMedia = function (test) {
-    test.expect(2);
+    test.expect(12);
 
-    instagram.locations.media(1, function (images, error) {
-	test.ok((images.length > 0));
+    var max_id = 0, min_id = 0;
+
+    var callback = function (media, error, pagination) {
+	test.ok((media.length > 0));
+	test.ok((pagination != null));
 	test.equal(error, null);
+    }
 
-	test.done();
+    instagram.tags.media(1, function (media, error, pagination) {
+	callback(media, error, pagination);
+
+	max_id = media[0].id;
+	min_id = media[media.length-1].id;
     });
+    instagram.tags.media(1, {max_id: max_id}, callback);
+    instagram.tags.media(1, {min_id: min_id}, callback);
+    instagram.tags.media(1, {max_id: max_id, min_id: min_id}, 
+			 function (media, error, pagination) {
+			     callback(media, error, pagination);
+			     test.done();
+			 });
 }
 
 exports.testLocationsSearch = function  (test) {

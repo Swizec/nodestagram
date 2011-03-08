@@ -99,6 +99,19 @@ InstagramLocationsClient.prototype.id = function (id, callback) {
     this.parent.fetch('/v1/locations/'+id, callback);
 }
 
+InstagramLocationsClient.prototype.media = function (id, params, callback) {
+    if (arguments.length < 3) {
+	var callback = params;
+	params = {};
+    }
+
+    this.parent.fetch('/v1/locations/'+id+'/media/recent',
+		      params,
+		      callback);
+}
+
+
+
 exports.createClient = function (client_id, client_secret) {
     var instagram_client = new InstagramClient(client_id, client_secret);
 
