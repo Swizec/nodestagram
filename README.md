@@ -58,6 +58,21 @@ For example:
     // search for a location
     instagram.tags.search({lat: ..., lng: ..., distance: ...}, function (tags, error) { ... });
 
+
+    // get info about a specific user
+    instagram.users.id(1234, function (user, error) { ... });
+    
+    // get recent media for a user
+    instagram.users.media(1234, {count: 12}, function (images, error, pagination) { ... });
+    
+    // getting own media, according to given *access_token* which is a required parameter
+    instagram.users.self({access_token: "1337", count: 12}, function (images, error, pagination) { ... });
+    
+    // search for usernames
+    instagram.users.search("Jack", function (users, error) { ... });
+    instagram.users.search({q: "John", count: 1}, function (users, error) { ... });
+     	
+
 # License
 
 Some sort of BSD or MIT license,  the general idea being:
