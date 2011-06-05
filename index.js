@@ -11,6 +11,7 @@ function InstagramClient(client_id, client_secret) {
     this.media = new InstagramMediaClient(this);
     this.tags = new InstagramTagsClient(this);
     this.locations = new InstagramLocationsClient(this);
+    this.users = new InstagramUsersClient(this);
 }
 
 InstagramClient.prototype.fetch = function (path, params, callback) {
@@ -114,7 +115,30 @@ InstagramLocationsClient.prototype.search = function (params, callback) {
     this.parent.fetch('/v1/locations/search', params, callback);
 }
 
+function InstagramUsersClient (parent) {
+    this.parent = parent;
+}
 
+InstagramUsersClient.prototype.id = function (id, callback) {
+    this.parent.fetch('/v1/users/'+id, callback);
+}
+
+InstagramUsersClient.prototype.media = function (id, params, callback) {
+    this.parent.fetch('/v1/users/'+id+'/media/recent', params, callback);
+}
+
+InstagramUsersClient.prototype.self = function (params, callback) {
+    this.parent.fetch('/v1/users/self/feed', params, callback);
+}
+
+InstagramUsersClient.prototype.search = function (params, callback) {
+  if (typeof params == "string") {
+    params = {
+      q: params
+    }
+  }
+  this.parent.fetch('/v1/users/search/', params, callback);
+}
 
 exports.createClient = function (client_id, client_secret) {
     var instagram_client = new InstagramClient(client_id, client_secret);
