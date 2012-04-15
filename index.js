@@ -33,20 +33,34 @@ InstagramClient.prototype.fetch = function (path, params, callback) {
 	    raw += chunk;
 	});
 	res.on('end', function () {
-	    var response = JSON.parse(raw);
-
-	    var pagination = null;
-	    if (typeof(response['pagination']) != 'undefined') {
-		pagination = response['pagination'];
+	    var response = {};
+	    try { 
+	        response = JSON.parse(raw);
+	    } catch (e) {
+	    
 	    }
 
-	    if (response['meta']['code'] == 200) {
-		callback(response['data'], 
-			 null, 
-			 pagination);
-	    }else{
-		callback(response['meta'], response['meta']['code'], pagination);
-	    }
+        var pagination = null;
+        if (typeof(response['pagination']) != 'undefined') {
+            pagination = response['pagination'];
+        }
+        var meta={};
+        if (typeof(response['meta']) != 'undefined') {
+            meta = response['meta'];
+        }
+
+        var code=500;
+        if (typeof(meta['code']) != 'undefined') {
+            code = meta['code'];
+        }
+        ;
+        if (code == 200) {
+            callback(response['data'], 
+                 null, 
+                 pagination);
+        }else{
+            callback(meta,code, pagination);
+        }
 	});
     });    
 }
