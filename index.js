@@ -33,20 +33,24 @@ InstagramClient.prototype.fetch = function (path, params, callback) {
 	    raw += chunk;
 	});
 	res.on('end', function () {
-	    var response = JSON.parse(raw);
+        try{
+            var response = JSON.parse(raw);
 
-	    var pagination = null;
-	    if (typeof(response['pagination']) != 'undefined') {
-		pagination = response['pagination'];
-	    }
+            var pagination = null;
+            if (typeof(response['pagination']) != 'undefined') {
+                pagination = response['pagination'];
+            }
 
-	    if (response['meta']['code'] == 200) {
-		callback(response['data'], 
-			 null, 
-			 pagination);
-	    }else{
-		callback(response['meta'], response['meta']['code'], pagination);
-	    }
+            if (response['meta']['code'] == 200) {
+                callback(response['data'], 
+                    null, 
+                    pagination);
+            }else{
+                callback(response['meta'], response['meta']['code'], pagination);
+            }
+        } catch (e) {
+            callback({}, {}, {});
+        }
 	});
     });    
 }
@@ -119,8 +123,15 @@ function InstagramUsersClient (parent) {
     this.parent = parent;
 }
 
-InstagramUsersClient.prototype.id = function (id, callback) {
-    this.parent.fetch('/v1/users/'+id, callback);
+InstagramUsersClient.prototype.id = function (id, params, callback) {
+    if (typeof params == "function") {
+        // be compatible with old implementations, where the second parameter was the callback
+        callback = params;
+        this.parent.fetch('/v1/users/' + id, callback);
+
+    } else {
+        this.parent.fetch('/v1/users/' + id, params, callback);
+    }
 }
 
 InstagramUsersClient.prototype.media = function (id, params, callback) {
