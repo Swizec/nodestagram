@@ -119,8 +119,15 @@ function InstagramUsersClient (parent) {
     this.parent = parent;
 }
 
-InstagramUsersClient.prototype.id = function (id, callback) {
-    this.parent.fetch('/v1/users/'+id, callback);
+InstagramUsersClient.prototype.id = function (id, params, callback) {
+    if (typeof params == "function") {
+        // be compatible with old implementations, where the second parameter was the callback
+        callback = params;
+        this.parent.fetch('/v1/users/' + id, callback);
+
+    } else {
+        this.parent.fetch('/v1/users/' + id, params, callback);
+    }
 }
 
 InstagramUsersClient.prototype.media = function (id, params, callback) {
